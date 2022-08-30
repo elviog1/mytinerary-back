@@ -92,8 +92,14 @@ const cityController ={
     },
     all: async(req,res) =>{
         let cities
+        let query = {}
+
+        if (req.query.name){
+            query.name = req.query.name
+        }
+  
         try{
-           cities = await City.find()
+           cities = await City.find({query})
            res.status(201).json({
               message: 'all cities found',
               response: cities,
@@ -107,23 +113,7 @@ const cityController ={
             })
         }
     },
-    all: async(req,res) =>{
-        let cities
-        try{
-           cities = await City.find()
-           res.status(201).json({
-              message: 'all cities found',
-              response: cities,
-              success: true,
-           })
-        } catch(error){
-            console.log(error);            
-            res.status(400).json({
-                message: "couldn't find cities",
-                success: false,
-            })
-        }
-    },
+
 }
 
 module.exports = cityController
