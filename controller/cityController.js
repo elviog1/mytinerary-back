@@ -21,7 +21,7 @@ const cityController ={
         const {id} = req.params
         try{
            let city = await City.findOne({_id:id})
-           if (event) {
+           if (city) {
             res.status(200).json({
                 message: "you get one city",
                 response: city,
@@ -40,7 +40,75 @@ const cityController ={
                     success: false,
             })
         }
+    },
+    destroy: async(req, res) => {
+        const {id} = req.params
+        try{
+            let city = await City.findOneAndDelete({_id:id})
+           if (city) {
+            res.status(200).json({
+                message: "city deleted successfully",
+                success: true
+              }) 
+           } else {
+            res.status(404).json({
+                message: "couldn't find city",
+                success: false,
+                   })
+                } 
+        } catch(error) {
+            console.log(error);
+            res.status(400).json({
+                message: "error",
+                success: false,
+        })
     }
+    },
+    update: async(req,res) =>{
+        const {id} = req.params
+        const modifyC = req.body.data
+        let city
+        try{
+            city = await City.findOneAndUpdate({_id:id}, modifyC, {
+            new: true,
+            })
+           if (city) {
+            res.status(200).json({
+                message: "city updated successfully",
+                response: city,
+                success: true
+              }) 
+           } else {
+            res.status(404).json({
+                message: "couldn't find city",
+                success: false,
+                   })
+                } 
+        } catch(error) {
+            console.log(error);
+            res.status(400).json({
+                message: "error",
+                success: false,
+        })
+    }
+    },
+    all: async(req,res) =>{
+        let cities
+        try{
+           cities = await City.find()
+           res.status(201).json({
+              message: 'all cities found',
+              response: cities,
+              success: true,
+           })
+        } catch(error){
+            console.log(error);            
+            res.status(400).json({
+                message: "couldn't find cities",
+                success: false,
+            })
+        }
+    },
 }
 
 module.exports = cityController
