@@ -66,12 +66,10 @@ const cityController ={
     },
     update: async(req,res) =>{
         const {id} = req.params
-        const modifyC = req.body.data
+        const modifyC = req.body
         let city
         try{
-            city = await City.findOneAndUpdate({_id:id}, modifyC, {
-            new: true,
-            })
+            city = await City.findOneAndUpdate({_id:id} , modifyC,{new: true})
            if (city) {
             res.status(200).json({
                 message: "city updated successfully",
@@ -91,6 +89,23 @@ const cityController ={
                 success: false,
         })
     }
+    },
+    all: async(req,res) =>{
+        let cities
+        try{
+           cities = await City.find()
+           res.status(201).json({
+              message: 'all cities found',
+              response: cities,
+              success: true,
+           })
+        } catch(error){
+            console.log(error);
+            res.status(400).json({
+                message: "couldn't find cities",
+                success: false,
+            })
+        }
     },
     all: async(req,res) =>{
         let cities
