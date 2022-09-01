@@ -99,7 +99,7 @@ const cityController ={
         }
   
         try{
-           cities = await City.find({query})
+           cities = await City.find(query)
            res.status(201).json({
               message: 'all cities found',
               response: cities,
