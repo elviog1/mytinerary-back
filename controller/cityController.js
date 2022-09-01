@@ -96,6 +96,8 @@ const cityController ={
 
         if (req.query.name){
             query.name = req.query.name
+            let regexp = new RegExp(`^${query.name}`,"i")
+            query.name = regexp
         }
   
         try{
