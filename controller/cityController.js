@@ -90,6 +90,32 @@ const cityController ={
         })
     }
     },
+    updateByName: async(req,res) =>{
+        const {cityname} = req.params
+        const modifyC = req.body
+        let city
+        try{
+            city = await City.findOneAndUpdate({name:cityname} , modifyC,{new: true})
+           if (city) {
+            res.status(200).json({
+                message: "city updated successfully",
+                response: city,
+                success: true
+              }) 
+           } else {
+            res.status(404).json({
+                message: "couldn't find city",
+                success: false,
+                   })
+                } 
+        } catch(error) {
+            console.log(error);
+            res.status(400).json({
+                message: "error",
+                success: false,
+        })
+    }
+    },
     all: async(req,res) =>{
         let cities
         let query = {}
