@@ -69,10 +69,10 @@ const itineraryController = {
         let itinerary
         let query = {}
 
-        if (req.query.name){
-            query.name = req.query.name
-            let regexp = new RegExp(`^${query.name}`,"i")
-            query.name = regexp
+        if (req.query.city){
+            query.city = req.query.city
+            let regexp = new RegExp(`^${query.city}`,"i")
+            query.city = regexp
         }
   
         try{
