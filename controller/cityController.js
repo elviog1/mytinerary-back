@@ -118,10 +118,10 @@ const cityController ={
     },
     all: async(req,res) =>{
         let cities
-        let query = {}
+        let query = req.query
 
-        if (req.query.name){
-            query.name = req.query.name
+        if (query.name){
+            // query.name = req.query.name
             let regexp = new RegExp(`^${query.name}`,"i")
             query.name = regexp
         }
