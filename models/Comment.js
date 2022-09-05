@@ -1,16 +1,16 @@
 const mongoose = require('mongoose')
 
 const schema = new mongoose.Schema({
-    coment:{type: String, required: true},
-    user:{type: String, required: true},
-    itinerary:{type: String, required: true},
+    comment:{type: String, required: true},
+    user:{type: mongoose.Types.ObjectId, ref: 'users', required: true},
+    itinerary:{type: mongoose.Types.ObjectId, ref: 'itineraries', required: true},
 })
-const Coment = mongoose.model(
-    'coments', 
+const Comment = mongoose.model(
+    'comments', 
     schema
     //nombre de la coleccion
     //esquema de datos (tabla)
 
 )
 
-module.exports = Coment
+module.exports = Comment
