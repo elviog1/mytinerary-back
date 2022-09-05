@@ -98,14 +98,14 @@ const itineraryController = {
 
         }
         try{
-           let itinerary = await Itinerary.find({city: id})
+           let itineraries = await Itinerary.find(query)
            .populate('city',{name:1, image:1})
            .populate('user',{name:1, photo:1})
    
-           if (city) {
+           if (itineraries) {
             res.status(200).json({
-                message: "you get itineraries",
-                response: itinerary,
+                message: "you get itineraries from city"+req.query.city.name,
+                response: itineraries,
                 success: true
               }) 
            } else {
@@ -134,7 +134,7 @@ const itineraryController = {
            .populate('city',{name:1, image:1})
            .populate('user',{name:1, photo:1})
    
-           if (city) {
+           if (itinerary) {
             res.status(200).json({
                 message: "you get itineraries from user"+ req.query.user,
                 response: itinerary,
