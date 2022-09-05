@@ -19,9 +19,11 @@ const commentController = {
     },
     all: async(req,res) =>{
         let comment
-        let query = {}
+        let query = req.body
         try{
             comment = await Comment.find(query)
+            .populate('user',{name:1,photo:1})
+            .populate('itinerary')
             res.status(200).json({
                 message: "all comments found",
                 response: comment,
