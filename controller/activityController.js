@@ -20,10 +20,32 @@ const activityController = {
     },
     all: async(req,res) =>{
         let activity
-        let query = req.query
+        let query = req.body
         try{
             activity = await Activity.find(query)
-            .populate('itinerary')
+
+            res.status(201).json({
+                message: "all activity found",
+                response: activity,
+                success: true
+            })
+        }catch(error){
+            console.log(error)
+            res.status(404).json({
+                message: "error",
+                success: false
+            })
+        }
+    },
+    getActivityFromItinerary: async(req,res) =>{
+        let activity
+        let query = {}
+        if(req.query.itinerary){
+            query.itinerary = req.query.itinerary
+        }
+        try{
+            activity = await Activity.find(query)
+            .populate('itinerary', {name:1})
             res.status(201).json({
                 message: "all activity found",
                 response: activity,
