@@ -36,6 +36,36 @@ const commentController = {
                 success: false
             })
         }
+    },
+    getCommentFromItinerary: async(req,res)=>{
+        let query = {}
+        if(req.query.itinerary){
+            query.itinerary = req.query.itinerary
+        }
+        try{
+            let itineraries = await Comment.find(query)
+            .populate('itinerary', {name:1})
+
+            if(itineraries){
+                res.status(201).json({
+                    message: "perfect !",
+                    response: itineraries,
+                    success: true
+                })
+            }else{
+                res.status(404).json({
+                    message: "couldn't find itineraries !",
+                    success: true
+                })
+            }
+
+        }catch(error){
+            console.log(error)
+            res.status(404).json({
+                message: "error!",
+                success: true
+            })
+        }
     }
 
 }
