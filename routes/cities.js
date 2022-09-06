@@ -9,4 +9,4 @@ router.get('/:id',read)
 router.delete('/:id',destroy)
 router.put('/:id',update)
 
-module.exports = router;
+module.exports = router; 
