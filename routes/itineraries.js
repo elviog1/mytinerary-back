@@ -6,7 +6,7 @@ const {create,update,destroy,all, readFromCity, readFromUser} = require('../cont
 router.get('/',all)
 router.post('/', create)
 router.get('/query',readFromCity)
-router.get('/query',readFromUser)
+router.get('/queryu',readFromUser)
 router.patch('/:id',update)
 router.delete('/:id',destroy)
 
