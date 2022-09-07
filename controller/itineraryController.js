@@ -136,7 +136,7 @@ const itineraryController = {
    
            if (itinerary) {
             res.status(200).json({
-                message: "you get itineraries from user"+ req.query.user,
+                message: "you get itineraries from user "+ req.query.user.name,
                 response: itinerary,
                 success: true
               }) 
