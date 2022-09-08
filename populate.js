@@ -11,7 +11,3 @@ User.create({
     mail: "lolito@juancito.jas",
     password:"chau123"
 })
-
-
-
-
