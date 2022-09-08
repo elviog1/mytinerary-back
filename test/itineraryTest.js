@@ -45,3 +45,21 @@ describe('GET /itinerary', function() {
     });
   });
 
+  describe('GET BY CITY /itinerary', function() {
+
+    it('Must respond with the 200 status code', function(done) {
+      request(app)
+        .get('/itineraries/query?city=630e518bbe28a5faae2423c0')
+        .expect(201, done)
+    })
+  
+    it('Must respond with 404 status code', function(done) {
+      request(app)
+        .get('/itinerar/query?city=630e518bbe28a5faae2423')
+        .expect(404)
+        .end(function(err, res){
+          if (err) return done(err)
+          return done()
+        })
+    });
+  });
