@@ -1,7 +1,6 @@
 const User = require ('../models/User')
 const crypto = require('crypto')
 const bcryptjs = require ('bcryptjs')
-const { triggerAsyncId } = require('async_hooks')
 const SendmailTransport = require('nodemailer/lib/sendmail-transport')
 const sendMail = require('./sendMail')
 
@@ -95,7 +94,20 @@ const userController ={
         }
     },
 
-    verifyMail: async () => {},
+    verifyMail: async (req,res) => {
+        const {id} = req.params
+        const user = await User.findOne({code:id})
+        if(user){
+            user.verified = true
+            await user.save()
+            res.redirect('http://localhost:4000/')
+        }else{
+            res.json({
+                message:"email has not been confirmed yet !",
+                success:false
+            })
+        }
+    },
 
     signIn: async () => {},
 
