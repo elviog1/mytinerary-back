@@ -1,7 +1,9 @@
 const User = require ('../models/User')
 const crypto = require('crypto')
-const bcyptjs = require ('bcryptjs')
+const bcryptjs = require ('bcryptjs')
 const { triggerAsyncId } = require('async_hooks')
+const SendmailTransport = require('nodemailer/lib/sendmail-transport')
+const sendMail = require('./sendMail')
 
 const userController ={
     create: async(req,res) =>{
@@ -40,7 +42,7 @@ const userController ={
         }
     },
     signUp: async (req, res) => {
-        const {name, photo, email, password, country, from, role/*viene del front para usar este metodo para ambos casos*/ } = req.body
+        let {name, photo, email, password, country, from, role/*viene del front para usar este metodo para ambos casos*/ } = req.body
         try{
            let user = await User.findOne({email})
            if (!user) {
@@ -49,17 +51,17 @@ const userController ={
               let code = crypto.randomBytes(15)//va a tener 15 digitos
               .toString('hex')//va a ser hexagecimal
               if (from === 'form'){
-                password = bcyptjs.hashSync(password,10)//metodo que requiere la contraseña y el nivel de seguridad de hasheo 
-                user = await new User({name, photo, email, password:[password], country, role,from:[from], logged, verified, code}).save()
-                
+                password = bcryptjs.hashSync(password,10)//metodo que requiere la contraseña y el nivel de seguridad de hasheo 
+                user = await new User({name, photo, email, password:[password], country, role, from:[from], logged, verified, code}).save()
+                sendMail(email, code)
                 res.status(200).json({
                    message: 'user signed up from form',
                    success: true
                 })
               } else {
-                password = bcyptjs.hashSync(pass,10)
+                password = bcryptjs.hashSync(pass,10)
                 verified = true
-                user =  await new User({name, photo, email, password:[password], country, role,from:[from], logged, verified, code}).save()
+                user =  await new User({name, photo, email, password:[password], country, role, from:[from], logged, verified, code}).save()
                 res.status(200).json({
                     message: 'user signed up from '+from,
                     success: true
@@ -74,9 +76,9 @@ const userController ={
                      success: false //porque no tiene exito la creacion de usuario
                   })
                } else {
-                 user.form.push(from), //vinculo la nueva forma de registro al usuario encontrado
+                 user.from.push(from), //vinculo la nueva forma de registro al usuario encontrado
                  user.verified = true //
-                 user.password.push(bcyptjs.hashSync(password,10))
+                 user.password.push(bcryptjs.hashSync(password,10))
                  await user.save()
                  res.status(201).json({
                     message: 'user signed up from '+from,
