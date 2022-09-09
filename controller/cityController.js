@@ -4,10 +4,11 @@ const cityController ={
     create: async(req,res) =>{
         const{name, image, country, population, fundation} = req.body 
         try{
-           await new City({name, image, country, population, fundation}).save()
+           let city = await new City({name, image, country, population, fundation}).save()
            res.status(201).json({
               message: 'city created',
               success: true,
+              id: city._id
            })
         } catch(error){
             console.log(error);            
@@ -90,13 +91,39 @@ const cityController ={
         })
     }
     },
+    updateByName: async(req,res) =>{
+        const {cityname} = req.params
+        const modifyC = req.body
+        let city
+        try{
+            city = await City.findOneAndUpdate({name:cityname} , modifyC,{new: true})
+           if (city) {
+            res.status(200).json({
+                message: "city updated successfully",
+                response: city,
+                success: true
+              }) 
+           } else {
+            res.status(404).json({
+                message: "couldn't find city",
+                success: false,
+                   })
+                } 
+        } catch(error) {
+            console.log(error);
+            res.status(400).json({
+                message: "error",
+                success: false,
+        })
+    }
+    },
     all: async(req,res) =>{
         let cities
         let query = {}
 
         if (req.query.name){
-            query.name = req.query.name
-            let regexp = new RegExp(`^${query.name}`,"i")
+            // query.name = req.query.name
+            let regexp = new RegExp(`^${req.query.name}`,"i")
             query.name = regexp
         }
   

@@ -1,14 +1,13 @@
 require ('dotenv').config()
 const db = require('./config/database')
 const City = require('./models/City')
+const User = require('./models/User')
 
-City.create({
-    name: "Firulandia",
-    image: "/img/Tokyo.jpg",
-    country: "Japan",
-    population: 13960000,
-    fundation: 1457
+User.create({
+    name: "Elba",
+    lastName: "Laso",
+    country: "Alagasia",
+    photo: "fotolinda.png",
+    mail: "lolito@juancito.jas",
+    password:"chau123"
 })
-
-
-
