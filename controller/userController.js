@@ -6,22 +6,22 @@ const SendmailTransport = require('nodemailer/lib/sendmail-transport')
 const sendMail = require('./sendMail')
 
 const userController ={
-    create: async(req,res) =>{
-        const{name, lastName, mail, password, photo, country} = req.body 
-        try{
-           await new User({name, lastName, mail, password, photo, country}).save()
-           res.status(201).json({
-              message: 'user created',
-              success: true,
-           })
-        } catch(error){
-            console.log(error);            
-            res.status(400).json({
-                message: "couldn't create user",
-                success: false,
-            })
-        }
-    },
+    // create: async(req,res) =>{
+    //     const{name, lastName, mail, password, photo, country} = req.body 
+    //     try{
+    //        await new User({name, lastName, mail, password, photo, country}).save()
+    //        res.status(201).json({
+    //           message: 'user created',
+    //           success: true,
+    //        })
+    //     } catch(error){
+    //         console.log(error);            
+    //         res.status(400).json({
+    //             message: "couldn't create user",
+    //             success: false,
+    //         })
+    //     }
+    // },
     all: async(req,res) =>{
         let users
         let query = {}
@@ -42,9 +42,9 @@ const userController ={
         }
     },
     signUp: async (req, res) => {
-        let {name, photo, email, password, country, from, role/*viene del front para usar este metodo para ambos casos*/ } = req.body
+        let {name, photo, mail, password, country, from, role/*viene del front para usar este metodo para ambos casos*/ } = req.body
         try{
-           let user = await User.findOne({email})
+           let user = await User.findOne({mail})
            if (!user) {
               let logged = false
               let verified = false
@@ -52,16 +52,16 @@ const userController ={
               .toString('hex')//va a ser hexagecimal
               if (from === 'form'){
                 password = bcryptjs.hashSync(password,10)//metodo que requiere la contraseña y el nivel de seguridad de hasheo 
-                user = await new User({name, photo, email, password:[password], country, role, from:[from], logged, verified, code}).save()
-                sendMail(email, code)
+                user = await new User({name, photo, mail, password:[password], country, role, from:[from], logged, verified, code}).save()
+                sendMail(mail, code)
                 res.status(200).json({
                    message: 'user signed up from form',
                    success: true
                 })
               } else {
-                password = bcryptjs.hashSync(pass,10)
+                password = bcryptjs.hashSync(password,10)
                 verified = true
-                user =  await new User({name, photo, email, password:[password], country, role, from:[from], logged, verified, code}).save()
+                user =  await new User({name, photo, mail, password:[password], country, role, from:[from], logged, verified, code}).save()
                 res.status(200).json({
                     message: 'user signed up from '+from,
                     success: true
