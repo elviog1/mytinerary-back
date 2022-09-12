@@ -119,7 +119,85 @@ const userController ={
     }
     },
 
-    signIn: async () => {},
+    signIn: async (req,res) => {
+        const {mail,password,from} = req.body
+        try{
+            const user = await User.findOne({mail})
+            if(!user){ // si user no existe
+                res.status(404).json({
+                    message: "User doesn't exist, please sign up",
+                    success: false
+                })
+            }else if(user.verified){ // si user existe y esta verificado
+                const checkPass = user.password.filter(passwordElement => bcryptjs.compareSync(password,passwordElement))
+                if(from === "form"){ // si el user intenta ingresar por form
+                    if(checkPass.length >0){ // si contraseña coincide
+
+                        const loginUser = {
+                            id: user._id,
+                            name: user.name,
+                            mail: user.mail,
+                            role: user.role,
+                            photo:user.photo,
+                           // from: user.from
+                        } // esto podrua servir para el prox sprint
+
+                        user.logged = true
+                        await user.save()
+
+                        res.status(200).json({
+                            success: true,
+                            response: {user:loginUser},
+                            message: "Welcome " + user.name
+                        })
+                    }else{ // si contraseña NO coincide
+                        res.status(400).json({
+                            success: false,
+                            message: "Username or password incorrect"
+                        })
+                    }
+                }else{ // si el user intenta ingresar por red social
+                    if(checkPass.length >0){ // si contraseña coincide
+
+                        const loginUser = {
+                            id: user._id,
+                            name: user.name,
+                            mail: user.mail,
+                            role: user.role,
+                            photo:user.photo,
+                           // from: user.from
+                        } // esto podrua servir para el prox sprint
+
+                        user.logged = true
+                        await user.save()
+
+                        res.status(200).json({
+                            success: true,
+                            response: {user:loginUser},
+                            message: "Welcome " + user.name
+                        })
+                    }else{ // si contraseña NO coincide
+                        res.status(400).json({
+                            success: false,
+                            message: "Invalid credentials"
+                        })
+                    }
+                }
+
+            }else{ // si user existe pero NO esta verificado
+                res.status(401).json({
+                    success: false,
+                    message: "Please, verify your email account and try again"
+                })
+            }
+        }catch(error){
+            console.log(error)
+            res.status(400).json({
+                success: false,
+                message: "Sign in ERROR, try again later"
+            })
+        }
+    },
 
     signOut: async () => {}, //findOneAndUpdate y cambiar logged de true a false
 }
