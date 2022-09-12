@@ -3,7 +3,7 @@ const {google} = require ('googleapis')
 const { auth } = require('google-auth-library')
 const OAuth2 = google.auth.OAuth2
 
-const sendmail = async(mail, code) =>{
+const sendMail = async(mail, code) =>{
      const client = new OAuth2(
         process.env.GOOGLE_ID,
         process.env.GOOGLE_SECRET,
@@ -31,9 +31,10 @@ const sendmail = async(mail, code) =>{
         from: process.env.GOOGLE_USER,
         to: mail,
         subject: 'Verify your My Tinerary account',
-        hmtl: `
+        html: `
         <div>
-
+           <h1>Hola rey todo bien</h1>
+           <a href='http://localhost:4000/auth/verify/${code}'>click here to verify your account</a>
         </div>`
      }
      await transport.sendMail(mailOptions,(error,response)=>{
@@ -45,4 +46,4 @@ const sendmail = async(mail, code) =>{
      })
 }
 
-module.exports = sendmail
+module.exports = sendMail

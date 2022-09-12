@@ -95,7 +95,29 @@ const userController ={
         }
     },
 
-    verifyMail: async () => {},
+    //el codigo generado pra verificar en sign up se pasa por params a este otro metodo
+    verifyMail: async (req, res) => {
+        const{code} = req.params
+        try{
+        let user = await User.findOne({code})
+        if(user){
+            user.verified = true
+            await user.save()
+            res.status(200).redirect(301, 'http://localhost:3000')
+        } else {
+            res.status(404).json({
+                message: "this email doesn't have an account",
+                success:false
+            })
+        }
+    }catch(error){
+        console.log(error)
+        res.status(400).json({
+            message:"couldn't sign up",
+            success:false
+        })
+    }
+    },
 
     signIn: async () => {},
 
