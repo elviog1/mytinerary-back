@@ -212,7 +212,27 @@ const userController ={
         }
     },
 
-    signOut: async () => {}, //findOneAndUpdate y cambiar logged de true a false
+    signOut: async (req,res) => {
+        const {id} = req.body
+        try{
+            const user = await User.findOne({_id:id})
+            if(user.logged){
+                user.logged = false
+                await user.save()
+                res.status(201).json({
+                    message: "User disconnect",
+                    success: true
+                })
+                
+            }
+        }catch(error){
+            console.log(error)
+            res.status(404).json({
+                message: "ERROR",
+                success: false
+            })
+        }
+    }, 
 }
 
     module.exports = userController    
