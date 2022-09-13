@@ -8,7 +8,7 @@ const Joi = require('joi')
 
 const validator = Joi.object({
     "name": Joi.string().min(4).message("name to short").max(15).message("name to long"),
-    "country": Joi.string(),
+    "country": Joi.string().min(1).message("invalid country"),
     "photo": Joi.string().uri().message("invalid URL"),
     "mail": Joi.string().min(8).message("mail to short"),
     "role":Joi.string(),
