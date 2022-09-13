@@ -1,9 +1,20 @@
 const Itinerary = require("../models/Itinerary")
+const Joi = require('joi')
 
+const validator = Joi.object({
+    "name": Joi.string().min(4).message("name to short").max(30).message("name to long"),
+    "user": Joi.string(),
+    "city": Joi.string(),
+    "price": Joi.number().min(0).message("invalid price"),
+    "likes":Joi.array().min(0).message("invalid likes"),
+    "tags":Joi.array().min(0).message("invalid tags"),
+    "duration": Joi.number().min(0).message("invalid duration")
+})
 const itineraryController = {
     create : async(req,res) =>{
         const {name,user,city,price,likes,tags,duration} = req.body
         try{
+            let result = await validator.validateAsync(req.body)
             await new Itinerary({name,user,city,price,likes,tags,duration}).save()
             res.status(201).json({
                 message: "itineray created",
@@ -21,6 +32,7 @@ const itineraryController = {
         let {id} = req.params
         let modifyI = req.body
         try{
+            let result = await validator.validateAsync(req.body)
             let itinerary = await Itinerary.findOneAndUpdate({_id:id},modifyI)
             if(itinerary){
                 res.status(200).json({
