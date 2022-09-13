@@ -4,6 +4,17 @@ const bcryptjs = require ('bcryptjs')
 const { triggerAsyncId } = require('async_hooks')
 const SendmailTransport = require('nodemailer/lib/sendmail-transport')
 const sendMail = require('./sendMail')
+const Joi = require('joi')
+
+const validator = Joi.object({
+    "name": Joi.string(),
+    "country": Joi.string(),
+    "photo": Joi.string().uri().message("invalid URL"),
+    "mail": Joi.string(),
+    "role":Joi.string(),
+    "password":Joi.string(),
+    "from": Joi.string()
+})
 
 const userController ={
     // create: async(req,res) =>{
@@ -44,6 +55,7 @@ const userController ={
     signUp: async (req, res) => {
         let {name, photo, mail, password, country, from, role/*viene del front para usar este metodo para ambos casos*/ } = req.body
         try{
+            let result = await validator.validateAsync(req.body)
            let user = await User.findOne({mail})
            if (!user) {
               let logged = false
@@ -89,7 +101,7 @@ const userController ={
         }catch(error){
             console.log(error)
             res.status(400).json({
-                message:"couldn't sign up",
+                message:error.message,
                 success:false
             })
         }
