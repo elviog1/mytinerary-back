@@ -7,12 +7,12 @@ const sendMail = require('./sendMail')
 const Joi = require('joi')
 
 const validator = Joi.object({
-    "name": Joi.string(),
+    "name": Joi.string().min(4).message("name to short").max(15).message("name to long"),
     "country": Joi.string(),
     "photo": Joi.string().uri().message("invalid URL"),
-    "mail": Joi.string(),
+    "mail": Joi.string().min(8).message("mail to short"),
     "role":Joi.string(),
-    "password":Joi.string(),
+    "password":Joi.string().min(6).message("password to short"),
     "from": Joi.string()
 })
 
@@ -132,6 +132,7 @@ const userController ={
     },
 
     signIn: async (req,res) => {
+        let result = await validator.validateAsync(req.body)
         const {mail,password,from} = req.body
         try{
             const user = await User.findOne({mail})
