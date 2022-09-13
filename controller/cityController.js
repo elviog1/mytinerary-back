@@ -1,7 +1,17 @@
 const City = require('../models/City')
+const Joi = require('joi')
+
+const validator = Joi.object({
+    "name": Joi.string().min(1),
+    "image": Joi.string().uri().message("invalid URL"),
+    "country": Joi.string().min(4),
+    "population": Joi.number(),
+    "fundation": Joi.number()
+})
 
 const cityController ={
     create: async(req,res) =>{
+        let result = await validator.validateAsync(req.body)
         const{name, image, country, population, fundation} = req.body 
         try{
            let city = await new City({name, image, country, population, fundation}).save()
@@ -66,6 +76,7 @@ const cityController ={
     }
     },
     update: async(req,res) =>{
+        let result = await validator.validateAsync(req.body)
         const {id} = req.params
         const modifyC = req.body
         let city
@@ -92,6 +103,7 @@ const cityController ={
     }
     },
     updateByName: async(req,res) =>{
+        let result = await validator.validateAsync(req.body)
         const {cityname} = req.params
         const modifyC = req.body
         let city
