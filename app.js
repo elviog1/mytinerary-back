@@ -73,6 +73,6 @@ io.on("connection",(socket)=>{
 
 
 
-server.listen(3001, ()=> console.log("socket on"))
+// server.listen(3000, ()=> console.log("socket on"))
 
 module.exports = app;
