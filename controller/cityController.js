@@ -2,24 +2,26 @@ const City = require('../models/City')
 const Joi = require('joi')
 
 const validator = Joi.object({
-    "name": Joi.string().min(1),
+    "name": Joi.string().min(3).message("name to short").max(30).message("name to long"),
     "image": Joi.string().uri().message("invalid URL"),
-    "country": Joi.string().min(4),
+    "country": Joi.string().min(4).message("name to short"),
     "population": Joi.number(),
     "fundation": Joi.number()
 })
 
 const cityController ={
     create: async(req,res) =>{
-        let result = await validator.validateAsync(req.body)
         const{name, image, country, population, fundation} = req.body 
         try{
+            let result = await validator.validateAsync(req.body)
            let city = await new City({name, image, country, population, fundation}).save()
-           res.status(201).json({
-              message: 'city created',
-              success: true,
-              id: city._id
-           })
+           if(city){
+               res.status(201).json({
+                   message: 'city created',
+                   success: true,
+                   id: city._id
+                })
+            }
         } catch(error){
             console.log(error);            
             res.status(400).json({
@@ -76,11 +78,11 @@ const cityController ={
     }
     },
     update: async(req,res) =>{
-        let result = await validator.validateAsync(req.body)
         const {id} = req.params
         const modifyC = req.body
         let city
         try{
+            let result = await validator.validateAsync(req.body)
             city = await City.findOneAndUpdate({_id:id} , modifyC,{new: true})
            if (city) {
             res.status(200).json({
@@ -140,6 +142,7 @@ const cityController ={
         }
   
         try{
+            let result = await validator.validateAsync(req.body)
            cities = await City.find(query)
            res.status(201).json({
               message: 'all cities found',
