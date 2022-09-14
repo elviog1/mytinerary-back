@@ -32,10 +32,29 @@ const sendMail = async(mail, code) =>{
         to: mail,
         subject: 'Verify your My Tinerary account',
         html: `
-        <div>
-           <h1>Hola rey todo bien</h1>
-           <a href='http://localhost:4000/auth/verify/${code}'>click here to verify your account</a>
-        </div>`
+      <div style="background-color:black;
+                  min-height:400px">
+      <h1 style="color: white; 
+      font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+      width: 100%;">
+   Thank you for create an account in MyTinerary</h1>
+<p style="color: white; 
+     font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+     width: 100%;
+     margin-bottom: 40px;">
+   You are only one step away from having your account </p>
+<a style="text-decoration:none; 
+          color: white; 
+          font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; 
+          background-color: rgb(255, 81, 0);
+          border-radius: 7px;
+          padding: 20px;
+          font-size: 18px;
+          width: 100%;
+          margin-top: 40px;" 
+       href='http://localhost:4000/auth/verify/${code}'>
+   Click here to verify your account</a>
+      </div>`
      }
      await transport.sendMail(mailOptions,(error,response)=>{
         if(error){
