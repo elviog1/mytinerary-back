@@ -52,6 +52,32 @@ const userController ={
             })
         }
     },
+    update: async(req,res) =>{
+        let {id} = req.params
+        let modifyU = req.body
+        try{
+            // let result = await validator.validateAsync(req.body)
+            let user = await User.findOneAndUpdate({_id:id},modifyU)
+            if(user){
+                res.status(200).json({
+                    message: "user update successfully ",
+                    response: user,
+                    success: true
+                })
+            }else{
+                res.status(404).json({
+                    message: "user not found ",
+                    success: false
+                })
+            }
+        }catch(error){
+            console.log(error)
+            res.status(400).json({
+                message: "error",
+                success: false
+            })
+        }
+    },
     signUp: async (req, res) => {
         let {name, photo, mail, password, country, from, role/*viene del front para usar este metodo para ambos casos*/ } = req.body
         try{
