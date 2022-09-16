@@ -7,7 +7,7 @@ const validator = Joi.object({
     "city": Joi.string(),
     "price": Joi.number().min(0).message("invalid price"),
     "likes":Joi.array().min(0).message("invalid likes"),
-    "tags":Joi.array().min(0).message("invalid tags"),
+    "tags":Joi.string().min(0).message("invalid tags"),
     "duration": Joi.number().min(0).message("invalid duration")
 })
 const itineraryController = {

@@ -54,6 +54,30 @@ const cityController ={
             })
         }
     },
+    readFromName: async(req,res) => {
+        const {cityname} = req.params
+        try{
+           let city = await City.findOne({name:cityname})
+           if (city) {
+            res.status(200).json({
+                message: "you get one city",
+                response: city,
+                success: true
+              }) 
+           } else {
+            res.status(404).json({
+                message: "couldn't find city",
+                success: false,
+                   })
+                } 
+            } catch(error) {
+                console.log(error);
+                res.status(400).json({
+                    message: "error",
+                    success: false,
+            })
+        }
+    },
     destroy: async(req, res) => {
         const {id} = req.params
         try{
@@ -105,11 +129,11 @@ const cityController ={
     }
     },
     updateByName: async(req,res) =>{
-        let result = await validator.validateAsync(req.body)
         const {cityname} = req.params
         const modifyC = req.body
         let city
         try{
+            let result = await validator.validateAsync(req.body)
             city = await City.findOneAndUpdate({name:cityname} , modifyC,{new: true})
            if (city) {
             res.status(200).json({
