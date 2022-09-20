@@ -5,7 +5,7 @@ const schema = new mongoose.Schema({
     user:{type: mongoose.Types.ObjectId, ref:'users' ,required: true},
     city:{type: mongoose.Types.ObjectId, ref:"cities", required: true},
     price:{type: Number, required: true},
-    likes:[{type: String, required: true}],
+    likes:{type: Array, required: true},
     tags:{type: String, required: true},
     duration:{type: Number, required: true},
 })
