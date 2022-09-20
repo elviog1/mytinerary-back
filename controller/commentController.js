@@ -2,7 +2,8 @@ const Comment = require('../models/Comment')
 
 const commentController = {
     create: async(req,res)=>{
-        const {comment,user,itinerary} = req.body
+        const {comment,itinerary} = req.body
+        let user = req.user.id
         try{
             await new Comment({comment,user,itinerary}).save()
             res.status(201).json({
