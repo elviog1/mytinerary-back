@@ -10,6 +10,6 @@ router.get('/query',readFromCity)
 router.get('/queryu',readFromUser)
 router.patch('/:id',update)
 router.delete('/:id',destroy)
-router.patch('/like', passport.authenticate('jwt', {session:false}), like)
+router.patch('/like/:itineraryId', passport.authenticate('jwt', {session:false}), like)
 
 module.exports = router
