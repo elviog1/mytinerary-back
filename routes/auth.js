@@ -9,7 +9,7 @@ router.post('/signup', signUp)
 router.post('/signin',signIn)
 router.get('/verify/:code', verifyMail)
 router.get('/token', passport.authenticate('jwt', {session:false}), verifyToken)//session:false sirve para autentificar al usuario
-router.post('/signout', signOut)
+router.post('/signout/:id', signOut)
 router.put('/:id',update)
 
 module.exports = router;
