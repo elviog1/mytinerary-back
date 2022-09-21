@@ -243,7 +243,7 @@ const userController ={
     },
 
     signOut: async (req,res) => {
-        const {id} = req.body
+        const {id} = req.params
         try{
             const user = await User.findOne({_id:id})
             if(user.logged){
