@@ -10,7 +10,7 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'MyTinerary' });
 });
 
-router.use('/cities',cityRouter)
+router.use('/cities',cityRouter) 
 router.use('/auth',userRouter)
 router.use('/itineraries',itineraryRouter )
 router.use('/comments',commentRouter)
