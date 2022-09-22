@@ -78,6 +78,33 @@ const itineraryController = {
             })
         }
     },
+    updateByName: async(req,res) =>{
+        const {itineraryname} = req.params
+        const modifyI = req.body
+        let itinerary
+        try{
+            // let result = await validator.validateAsync(req.body)
+            itinerary = await Itinerary.findOneAndUpdate({name:itineraryname} , modifyI,{new: true})
+           if (itinerary) {
+            res.status(200).json({
+                message: "itinerary updated successfully",
+                response: itinerary,
+                success: true
+              }) 
+           } else {
+            res.status(404).json({
+                message: "couldn't find itinerary",
+                success: false,
+                   })
+                } 
+        } catch(error) {
+            console.log(error);
+            res.status(400).json({
+                message: error,
+                success: false,
+        })
+    }
+    },
     destroy: async(req,res)=>{
         let {id} = req.params
         try{
