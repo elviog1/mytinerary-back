@@ -3,11 +3,11 @@ const Joi = require('joi')
 
 const validator = Joi.object({
     "name": Joi.string().min(4).message("name to short").max(30).message("name to long"),
-    "user": Joi.string(),
-    "city": Joi.string(),
+    "user": Joi.string().min(8).message('invalid_user'),
+    "city": Joi.string().min(8).message('invalid_city'),
     "price": Joi.number().min(0).message("invalid price"),
     "likes":Joi.array().min(0).message("invalid likes"),
-    "tags":Joi.string().min(0).message("invalid tags"),
+    "tags":Joi.array().min(0).message("invalid tags"),
     "duration": Joi.number().min(0).message("invalid duration")
 })
 const itineraryController = {
@@ -83,7 +83,7 @@ const itineraryController = {
         const modifyI = req.body
         let itinerary
         try{
-            // let result = await validator.validateAsync(req.body)
+            let result = await validator.validateAsync(req.body)
             itinerary = await Itinerary.findOneAndUpdate({name:itineraryname} , modifyI,{new: true})
            if (itinerary) {
             res.status(200).json({
