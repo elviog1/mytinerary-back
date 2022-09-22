@@ -180,6 +180,7 @@ const userController ={
                             mail: user.mail,
                             role: user.role,
                             photo:user.photo,
+                            country:user.country
                            // from: user.from
                         } // esto podrua servir para el prox sprint
 
@@ -207,6 +208,7 @@ const userController ={
                             mail: user.mail,
                             role: user.role,
                             photo:user.photo,
+                            country:user.country
                            // from: user.from
                         } // esto podrua servir para el prox sprint
 
