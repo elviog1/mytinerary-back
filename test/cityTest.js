@@ -32,21 +32,21 @@ const app = require ('../app')
 //     });
 //   });
 
-  describe('GET /city', function(){
-    // it('Must respond with the cities', function(done){
-    //   request(app)
-    //   .get('/cities')
-    //   .auth('name')
-    //   .set('Accept','application/json')
-    //   .expect(201,done)
-    // })
-    it('Must respond with the id',function (done){
-      request(app)
-      .get('/cities')
-      .auth('id')
-      .expect(201,done)
-    })
-  })
+  // describe('GET /city', function(){
+  //   // it('Must respond with the cities', function(done){
+  //   //   request(app)
+  //   //   .get('/cities')
+  //   //   .auth('name')
+  //   //   .set('Accept','application/json')
+  //   //   .expect(201,done)
+  //   // })
+  //   it('Must respond with the id',function (done){
+  //     request(app)
+  //     .get('/cities')
+  //     .auth('id')
+  //     .expect(201,done)
+  //   })
+  // })
 
 
 

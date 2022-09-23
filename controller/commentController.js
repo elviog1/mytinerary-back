@@ -17,6 +17,32 @@ const commentController = {
             })
         }
     },
+    update: async(req,res) =>{
+        let {id} = req.params
+        let modifyC = req.body
+        try{
+            // let result = await validator.validateAsync(req.body)
+            let comment = await Comment.findOneAndUpdate({_id:id},modifyC)
+            if(comment){
+                res.status(200).json({
+                    message: "comment update successfully ",
+                    response: comment,
+                    success: true
+                })
+            }else{
+                res.status(404).json({
+                    message: "comment not found ",
+                    success: false
+                })
+            }
+        }catch(error){
+            console.log(error)
+            res.status(400).json({
+                message: "error",
+                success: false
+            })
+        }
+    },
     all: async(req,res) =>{
         let comment
         let query = req.body
@@ -45,6 +71,7 @@ const commentController = {
         try{
             let itineraries = await Comment.find(query)
             .populate('itinerary', {name:1})
+            .populate('user', {photo:1, name: 1})
 
             if(itineraries){
                 res.status(201).json({
@@ -66,6 +93,53 @@ const commentController = {
                 success: true
             })
         }
+    },
+    oneComment: async(req,res) => {
+        const {id} = req.params
+        try{
+           let comment = await Comment.findOne({_id:id})
+           if (comment) {
+            res.status(200).json({
+                message: "you get one comment",
+                response: comment,
+                success: true
+              }) 
+           } else {
+            res.status(404).json({
+                message: "couldn't find comment",
+                success: false,
+                   })
+                } 
+            } catch(error) {
+                console.log(error);
+                res.status(400).json({
+                    message: "error",
+                    success: false,
+            })
+        }
+    },
+    destroy: async(req, res) => {
+        const {id} = req.params
+        try{
+            let comment = await Comment.findOneAndDelete({_id:id})
+           if (comment) {
+            res.status(200).json({
+                message: "comment deleted successfully",
+                success: true
+              }) 
+           } else {
+            res.status(404).json({
+                message: "couldn't find comment",
+                success: false,
+                   })
+                } 
+        } catch(error) {
+            console.log(error);
+            res.status(400).json({
+                message: "error",
+                success: false,
+        })
+    }
     }
 
 }
