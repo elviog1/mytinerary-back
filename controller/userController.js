@@ -5,6 +5,8 @@ const { triggerAsyncId } = require('async_hooks')
 const SendmailTransport = require('nodemailer/lib/sendmail-transport')
 const sendMail = require('./sendMail')
 const Joi = require('joi')
+const jwt = require ('jsonwebtoken')
+const { token } = require('morgan')
 
 const validator = Joi.object({
     "name": Joi.string().min(4).message("name to short").max(15).message("name to long"),
@@ -178,15 +180,17 @@ const userController ={
                             mail: user.mail,
                             role: user.role,
                             photo:user.photo,
+                            country:user.country
                            // from: user.from
                         } // esto podrua servir para el prox sprint
 
                         user.logged = true
                         await user.save()
-
+                        const token = jwt.sign({id: user._id}, process.env.KEY_JWT, {expiresIn: 60*60*24})
                         res.status(200).json({
                             success: true,
-                            response: {user:loginUser},
+                            response: {user:loginUser,
+                                token:token},                           
                             message: "Welcome " + user.name
                         })
                     }else{ // si contraseña NO coincide
@@ -204,15 +208,17 @@ const userController ={
                             mail: user.mail,
                             role: user.role,
                             photo:user.photo,
+                            country:user.country
                            // from: user.from
                         } // esto podrua servir para el prox sprint
 
                         user.logged = true
                         await user.save()
-
+                        const token = jwt.sign({id: user._id}, process.env.KEY_JWT, {expiresIn: 60*60*24})
                         res.status(200).json({
                             success: true,
-                            response: {user:loginUser},
+                            response: {user:loginUser,
+                                token:token},
                             message: "Welcome " + user.name
                         })
                     }else{ // si contraseña NO coincide
@@ -239,7 +245,7 @@ const userController ={
     },
 
     signOut: async (req,res) => {
-        const {id} = req.body
+        const {id} = req.params
         try{
             const user = await User.findOne({_id:id})
             if(user.logged){
@@ -259,6 +265,23 @@ const userController ={
             })
         }
     }, 
+    verifyToken: async(req, res) =>{
+        if (!req.err) {
+            const token = jwt.sign({id: req.user.id}, process.env.KEY_JWT, {expiresIn: 60*60*24})
+            res.status(200).json({
+                success:true,
+                response:{
+                    user: req.user,
+                    token: token
+                }
+            })
+        } else {
+            res.json({
+                success:false,
+                message:'sign in please'
+            })
+        }
+    }
 }
 
     module.exports = userController    

@@ -3,11 +3,11 @@ const Joi = require('joi')
 
 const validator = Joi.object({
     "name": Joi.string().min(4).message("name to short").max(30).message("name to long"),
-    "user": Joi.string(),
-    "city": Joi.string(),
+    "user": Joi.string().min(8).message('invalid_user'),
+    "city": Joi.string().min(8).message('invalid_city'),
     "price": Joi.number().min(0).message("invalid price"),
     "likes":Joi.array().min(0).message("invalid likes"),
-    "tags":Joi.string().min(0).message("invalid tags"),
+    "tags":Joi.array().min(0).message("invalid tags"),
     "duration": Joi.number().min(0).message("invalid duration")
 })
 const itineraryController = {
@@ -25,6 +25,30 @@ const itineraryController = {
             res.status(400).json({
                 message: "error",
                 success: false
+            })
+        }
+    },
+        read: async(req,res) => {
+        const {id} = req.params
+        try{
+           let itinerary = await Itinerary.findOne({_id:id})
+           if (itinerary) {
+            res.status(200).json({
+                message: "you get one itinerary",
+                response: itinerary,
+                success: true
+              }) 
+           } else {
+            res.status(404).json({
+                message: "couldn't find itinerary",
+                success: false,
+                   })
+                } 
+            } catch(error) {
+                console.log(error);
+                res.status(400).json({
+                    message: "error",
+                    success: false,
             })
         }
     },
@@ -53,6 +77,33 @@ const itineraryController = {
                 success: false
             })
         }
+    },
+    updateByName: async(req,res) =>{
+        const {itineraryname} = req.params
+        const modifyI = req.body
+        let itinerary
+        try{
+            let result = await validator.validateAsync(req.body)
+            itinerary = await Itinerary.findOneAndUpdate({name:itineraryname} , modifyI,{new: true})
+           if (itinerary) {
+            res.status(200).json({
+                message: "itinerary updated successfully",
+                response: itinerary,
+                success: true
+              }) 
+           } else {
+            res.status(404).json({
+                message: "couldn't find itinerary",
+                success: false,
+                   })
+                } 
+        } catch(error) {
+            console.log(error);
+            res.status(400).json({
+                message: error,
+                success: false,
+        })
+    }
     },
     destroy: async(req,res)=>{
         let {id} = req.params
@@ -166,6 +217,44 @@ const itineraryController = {
             })
         }
     },
+    like :async(req, res)=>{
+        let userId = req.user.id
+        let {itineraryId} = req.params
+        try {
+            let itinerary = await Itinerary.findOne({_id:itineraryId})
+            console.log(itinerary)
+            if(itinerary && itinerary.likes.includes(userId)){
+                itinerary.likes.pull(userId)
+                await itinerary.save()
+                //await Itinerary.findOneAndUpdate({_userId:itineraryId}, {$pull:{likes:userId}}, {new:true}) ($set para modificar, usar en comentarios)
+                res.status(200).json({
+                    success:true,
+                    response:itinerary.likes,
+                    message:"itinerary disliked"
+                })
+            } else if(itinerary && !itinerary.likes.includes(userId)){
+                itinerary.likes.push(userId)
+                await itinerary.save()
+                //await Itinerary.findOneAndUpdate({_userId:itineraryId}, {$push:{likes:userId}}, {new:true})
+                res.status(200).json({
+                    success:false,
+                    response:itinerary.likes,
+                    message:"itinerary liked"
+                })
+            }else{
+                res.status(404).json({
+                    success:true,
+                    message:"itinerary not found"
+                })
+            }
+        } catch(error) {
+            console.log(error);
+            res.status(400).json({
+                message: "error",
+                success: false,
+        })
+    }
+    }
 }
 
 module.exports = itineraryController
