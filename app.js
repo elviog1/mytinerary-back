@@ -49,7 +49,7 @@ const server = http.createServer(app)
 const {Server} = require('socket.io')
 const io = new Server(server, {
   cors: {
-    origin: "https://my-tinerary-dreamjuan-back.herokuapp.com",
+    origin: "https://my-tynerary-front-dreamjuan.herokuapp.com",
     methods: ["GET","POST"],
   }
 });
