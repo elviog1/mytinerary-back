@@ -73,6 +73,6 @@ io.on("connection",(socket)=>{
 
 
 
-server.listen("https://my-tynerary-front-dreamjuan.herokuapp.com", ()=> console.log("socket on"))
+server.listen("https://my-tinerary-dreamjuan-back.herokuapp.com", ()=> console.log("socket on"))
 
 module.exports = app;
