@@ -143,7 +143,7 @@ const userController ={
         if(user){
             user.verified = true
             await user.save()
-            res.status(200).redirect(301, 'http://localhost:3000')
+            res.status(200).redirect(301, 'https://my-tinerary-dreamjuan-back.herokuapp.com')
         } else {
             res.status(404).json({
                 message: "this email doesn't have an account",

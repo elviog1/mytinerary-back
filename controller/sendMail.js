@@ -52,7 +52,7 @@ const sendMail = async(mail, code) =>{
           font-size: 18px;
           width: 100%;
           margin-top: 40px;" 
-       href='http://localhost:4000/auth/verify/${code}'>
+       href='https://my-tinerary-dreamjuan-back.herokuapp.com/auth/verify/${code}'>
    Click here to verify your account</a>
       </div>`
      }
